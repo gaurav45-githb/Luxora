@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}{{ car.name }} — EliteDrive{% endblock %}
+
+{% block content %}
+<section class="detail">
+    <img src="{{ car.image }}" alt="{{ car.name }}">
+
+    <div class="detail-copy">
+        <span class="eyebrow">{{ car.type }}</span>
+        <h1>{{ car.name }}</h1>
+
+        <div class="price">
+            ₹{{ "{:,}".format(car.price) }} <small>/ day</small>
+        </div>
+
+        <p>Enjoy a premium driving experience with the {{ car.name }}. This vehicle is available for luxury rental through EliteDrive.</p>
+
+        <div class="detail-specs">
+            <span><b>{{ car.seats }}</b>Seats</span>
+            <span><b>{{ car.transmission }}</b>Transmission</span>
+            <span><b>{{ car.fuel }}</b>Fuel</span>
+            <span><b>{{ car.rating }}★</b>Rating</span>
+        </div>
+
+        <a class="btn" href="{{ url_for('booking', car_id=car.id) }}">
+            Reserve This Car →
+        </a>
+    </div>
+</section>
+{% endblock %}

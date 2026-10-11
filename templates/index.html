@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}EliteDrive — Luxury Car Rental{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-copy">
+        <span class="eyebrow">ELITEDRIVE</span>
+        <h1>Drive the <em>extraordinary.</em></h1>
+        <p>Premium luxury cars for memorable journeys. Choose your car, select your dates and book your drive.</p>
+
+        <div class="actions">
+            <a class="btn" href="{{ url_for('fleet') }}">Explore Fleet</a>
+            <a class="btn outline" href="{{ url_for('booking') }}">Book a Car</a>
+        </div>
+
+        <div class="trust">
+            <span>★ Premium Fleet</span>
+            <span>Flexible Booking</span>
+            <span>24/7 Support</span>
+        </div>
+    </div>
+
+    <div class="hero-image">
+        <img src="https://images.openai.com/static-rsc-4/oeUTe7wfKZmPyumbElRyA4yzEPF3_3ZVUCUqa35U1lT8V75s3izcn2Q9Alvrf9G1oxNu2Uh18LxIbTyiTuQADyuKubCFjlWmSP1T7uaceCCsZRsTL0K8je2gdun_l95f9RVF1nICddSy_V6YPfu3lP8mMH9Mnl8naVaf_GLYA0E?purpose=inline" alt="Luxury car">
+        <div class="floating-card">
+            <b>Rolls-Royce Ghost</b>
+            <span>From ₹45,000 / day</span>
+        </div>
+    </div>
+</section>
+
+<section class="stats">
+    <div><b>{{ total_cars }}+</b><span>Luxury Cars</span></div>
+    <div><b>8</b><span>Models</span></div>
+    <div><b>24/7</b><span>Booking Support</span></div>
+    <div><b>100%</b><span>Online Booking</span></div>
+</section>
+
+<section class="section">
+    <div class="section-title">
+        <span class="eyebrow">THE ELITE COLLECTION</span>
+        <h2>Choose your car.</h2>
+        <p>Explore our collection of luxury, sports, supercar, SUV and electric vehicles.</p>
+    </div>
+
+    <div class="car-grid">
+        {% for car in featured_cars %}
+        <article class="car-card">
+            <div class="car-img">
+                <img src="{{ car.image }}" alt="{{ car.name }}">
+                <span>{{ car.type }}</span>
+            </div>
+
+            <div class="car-body">
+                <div>
+                    <h3>{{ car.name }}</h3>
+                    <small>★ {{ car.rating }} · {{ car.city }}</small>
+                </div>
+                <b>₹{{ "{:,}".format(car.price) }}<small>/day</small></b>
+            </div>
+
+            <div class="specs">
+                <span>◉ {{ car.seats }} seats</span>
+                <span>↗ {{ car.transmission }}</span>
+                <span>◇ {{ car.fuel }}</span>
+            </div>
+
+            <a class="btn outline" href="{{ url_for('car_details', car_id=car.id) }}" style="margin:15px 20px 20px;width:calc(100% - 40px)">
+                View Details
+            </a>
+        </article>
+        {% endfor %}
+    </div>
+
+    <div class="center">
+        <a class="btn outline" href="{{ url_for('fleet') }}">View Full Fleet →</a>
+    </div>
+</section>
+
+<section class="dark-band">
+    <div>
+        <span class="eyebrow">SIMPLE BOOKING</span>
+        <h2>Your luxury car.<br>Your journey.</h2>
+        <p>Select a vehicle, choose your dates and submit your booking request in a few simple steps.</p>
+        <a class="btn gold" href="{{ url_for('booking') }}">Start Booking →</a>
+    </div>
+
+    <div class="band-points">
+        <span>01 <b>Choose your car</b></span>
+        <span>02 <b>Select your dates</b></span>
+        <span>03 <b>Confirm your booking</b></span>
+    </div>
+</section>
+{% endblock %}

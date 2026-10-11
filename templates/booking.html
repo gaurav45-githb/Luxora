@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Booking — EliteDrive{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+    <span class="eyebrow">ELITEDRIVE</span>
+    <h1>Book your luxury car.</h1>
+    <p>Enter your journey details and submit your booking request.</p>
+</section>
+
+<section class="form-section">
+    <form method="POST" action="{{ url_for('booking') }}">
+        <div class="form-grid">
+
+            <label>
+                Pick-up location
+                <input name="pickup_location" required placeholder="Mumbai, Delhi, Pune...">
+            </label>
+
+            <label>
+                Drop-off location
+                <input name="dropoff_location" required placeholder="Where should you return the car?">
+            </label>
+
+            <label>
+                Pick-up date
+                <input name="pickup_date" required type="date">
+            </label>
+
+            <label>
+                Return date
+                <input name="return_date" required type="date">
+            </label>
+
+            <label>
+                Pick-up time
+                <input name="pickup_time" required type="time">
+            </label>
+
+            <label>
+                Choose car
+                <select name="car_id" required>
+                    <option value="">Select a car</option>
+                    {% for car in cars %}
+                    <option value="{{ car.id }}" {% if selected_car_id == car.id %}selected{% endif %}>
+                        {{ car.name }} — ₹{{ "{:,}".format(car.price) }}/day
+                    </option>
+                    {% endfor %}
+                </select>
+            </label>
+
+            <label>
+                Driver age
+                <input name="driver_age" required type="number" min="18" placeholder="25">
+            </label>
+        </div>
+
+        <div class="summary">
+            <span>Logged in as<br><b>{{ session.get("user_name") }}</b></span>
+            <span>Booking status<br><b>Request</b></span>
+        </div>
+
+        <button type="submit" class="btn">Confirm Booking Request →</button>
+    </form>
+</section>
+{% endblock %}

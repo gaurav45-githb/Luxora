@@ -1,0 +1,364 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | EliteDrive{% endblock %}
+
+{% block content %}
+
+<section class="dashboard-page">
+
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+
+        <div>
+            <p class="dashboard-label">ELITEDRIVE</p>
+
+            <h1>
+                Welcome back,
+                <span>{{ user.name }}</span>
+            </h1>
+
+            <p class="dashboard-subtitle">
+                Manage your luxury car bookings and explore your next drive.
+            </p>
+        </div>
+
+        <a href="{{ url_for('fleet') }}" class="dashboard-book-btn">
+            Browse Luxury Cars
+        </a>
+
+    </div>
+
+
+    <!-- Statistics -->
+    <div class="dashboard-stats">
+
+        <div class="dashboard-stat-card">
+
+            <div class="stat-icon">
+                🚘
+            </div>
+
+            <div>
+                <p>Total Bookings</p>
+                <h2>{{ bookings|length }}</h2>
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-stat-card">
+
+            <div class="stat-icon">
+                ✓
+            </div>
+
+            <div>
+                <p>Account Status</p>
+                <h2 class="active-status">Active</h2>
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-stat-card">
+
+            <div class="stat-icon">
+                👤
+            </div>
+
+            <div>
+                <p>Member Since</p>
+
+                <h2>
+                    {{ user.created_at.strftime('%Y') if user.created_at else '2026' }}
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Main Dashboard Grid -->
+    <div class="dashboard-grid">
+
+
+        <!-- User Profile -->
+        <div class="dashboard-card profile-card">
+
+            <div class="card-heading">
+
+                <div>
+                    <p class="card-label">ACCOUNT</p>
+                    <h2>Your Profile</h2>
+                </div>
+
+                <div class="profile-avatar">
+                    {{ user.name[0]|upper }}
+                </div>
+
+            </div>
+
+
+            <div class="profile-details">
+
+                <div class="profile-item">
+                    <span>Name</span>
+                    <strong>{{ user.name }}</strong>
+                </div>
+
+                <div class="profile-item">
+                    <span>Email</span>
+                    <strong>{{ user.email }}</strong>
+                </div>
+
+                <div class="profile-item">
+                    <span>Phone</span>
+                    <strong>{{ user.phone }}</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Quick Actions -->
+        <div class="dashboard-card">
+
+            <div class="card-heading">
+
+                <div>
+                    <p class="card-label">QUICK ACCESS</p>
+                    <h2>What would you like to do?</h2>
+                </div>
+
+            </div>
+
+
+            <div class="quick-actions">
+
+                <a href="{{ url_for('fleet') }}" class="quick-action">
+
+                    <span class="quick-icon">🚘</span>
+
+                    <div>
+                        <strong>Browse Fleet</strong>
+                        <small>Explore luxury cars</small>
+                    </div>
+
+                    <span class="arrow">→</span>
+
+                </a>
+
+
+                <a href="{{ url_for('booking') }}" class="quick-action">
+
+                    <span class="quick-icon">📅</span>
+
+                    <div>
+                        <strong>Book a Car</strong>
+                        <small>Start a new booking</small>
+                    </div>
+
+                    <span class="arrow">→</span>
+
+                </a>
+
+
+                <a href="{{ url_for('logout') }}" class="quick-action logout-action">
+
+                    <span class="quick-icon">↪</span>
+
+                    <div>
+                        <strong>Logout</strong>
+                        <small>Sign out of your account</small>
+                    </div>
+
+                    <span class="arrow">→</span>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Booking Section -->
+    <div class="dashboard-card bookings-section">
+
+        <div class="bookings-heading">
+
+            <div>
+                <p class="card-label">YOUR ACTIVITY</p>
+
+                <h2>My Bookings</h2>
+
+                <p>
+                    View your recent luxury car reservations.
+                </p>
+            </div>
+
+            <a href="{{ url_for('fleet') }}" class="outline-btn">
+                + New Booking
+            </a>
+
+        </div>
+
+
+        {% if bookings %}
+
+            <div class="booking-list">
+
+                {% for booking in bookings %}
+
+                    <div class="booking-row">
+
+                        <!-- Car -->
+                        <div class="booking-car">
+
+                            <div class="booking-car-icon">
+                                🚘
+                            </div>
+
+                            <div>
+                                <span class="booking-label">
+                                    Luxury Vehicle
+                                </span>
+
+                                <h3>
+                                    {{ booking.car.name }}
+                                </h3>
+                            </div>
+
+                        </div>
+
+
+                        <!-- Location -->
+                        <div class="booking-info">
+
+                            <span>ROUTE</span>
+
+                            <strong>
+                                {{ booking.pickup_location }}
+                                →
+                                {{ booking.dropoff_location }}
+                            </strong>
+
+                        </div>
+
+
+                        <!-- Dates -->
+                        <div class="booking-info">
+
+                            <span>DATES</span>
+
+                            <strong>
+                                {{ booking.pickup_date }}
+                            </strong>
+
+                            <small>
+                                to {{ booking.return_date }}
+                            </small>
+
+                        </div>
+
+
+                        <!-- Amount -->
+                        <div class="booking-info amount">
+
+                            <span>TOTAL</span>
+
+                            <strong>
+                                ₹{{ "{:,}".format(booking.total_amount) }}
+                            </strong>
+
+                        </div>
+
+
+                        <!-- Status -->
+                        <div>
+
+                            {% if booking.status == "Confirmed" %}
+
+                                <span class="booking-status confirmed">
+                                    Confirmed
+                                </span>
+
+                            {% elif booking.status == "Cancelled" %}
+
+                                <span class="booking-status cancelled">
+                                    Cancelled
+                                </span>
+
+                            {% else %}
+
+                                <span class="booking-status pending">
+                                    Pending
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <!-- Empty Booking State -->
+
+            <div class="empty-bookings">
+
+                <div class="empty-icon">
+                    🚘
+                </div>
+
+                <h3>No bookings yet</h3>
+
+                <p>
+                    Your luxury driving experience starts here.
+                </p>
+
+                <a href="{{ url_for('fleet') }}" class="dashboard-book-btn">
+                    Explore Cars
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- Bottom Banner -->
+    <div class="dashboard-banner">
+
+        <div>
+
+            <p>YOUR NEXT JOURNEY AWAITS</p>
+
+            <h2>
+                Choose your car.<br>
+                Make every journey exceptional.
+            </h2>
+
+        </div>
+
+        <a href="{{ url_for('fleet') }}" class="banner-btn">
+            Explore Fleet →
+        </a>
+
+    </div>
+
+</section>
+
+
+
+
+{% endblock %}
